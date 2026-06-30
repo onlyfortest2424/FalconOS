@@ -48,3 +48,39 @@ chmod +x "$INSTALLER"
 
 ok "Official Installer Downloaded"
 
+echo
+echo "Running Official Installer..."
+echo
+
+bash "$INSTALLER"
+
+INSTALL_EXIT_CODE=$?
+
+echo
+
+if [ $INSTALL_EXIT_CODE -ne 0 ]; then
+    error "PasarGuard installer exited with code $INSTALL_EXIT_CODE"
+fi
+
+ok "Official Installer Finished"
+
+echo
+
+echo "Checking Installation..."
+
+if command -v pasarguard >/dev/null 2>&1; then
+    ok "PasarGuard CLI Installed"
+else
+    warn "PasarGuard CLI Not Found"
+fi
+
+if systemctl list-unit-files | grep -qi pasarguard; then
+    ok "PasarGuard Service Installed"
+else
+    warn "PasarGuard Service Not Found"
+fi
+
+echo
+echo "Installation Completed."
+
+pause
