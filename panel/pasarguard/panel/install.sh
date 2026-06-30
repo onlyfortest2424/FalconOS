@@ -52,7 +52,7 @@ echo
 echo "Running Official Installer..."
 echo
 
-bash "$INSTALLER"
+bash "$INSTALLER" install
 
 INSTALL_EXIT_CODE=$?
 
