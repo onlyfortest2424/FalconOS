@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
-BASE_DIR="$(cd "$(dirname "$0")/../../.." && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BASE_DIR="$(realpath "$SCRIPT_DIR/../..")"
 
+echo "SCRIPT_DIR=$SCRIPT_DIR"
 echo "BASE_DIR=$BASE_DIR"
 echo "UI Exists? $(test -f "$BASE_DIR/core/ui.sh" && echo YES || echo NO)"
 
