@@ -2,14 +2,15 @@
 
 BASE_DIR="$(cd "$(dirname "$0")/../../.." && pwd)"
 
+echo "BASE_DIR=$BASE_DIR"
+echo "UI Exists? $(test -f "$BASE_DIR/core/ui.sh" && echo YES || echo NO)"
+
 source "$BASE_DIR/core/ui.sh"
-source "$BASE_DIR/core/functions.sh"
 
-clear
+echo "Source Exit Code=$?"
 
-title "PasarGuard Status"
-
-echo
+type title
+type pause
 
 ########################################
 # System Information
@@ -84,10 +85,11 @@ echo "Database        : $DB"
 # PgBouncer
 ########################################
 
-if docker ps --format '{{.Names}}' | grep -q pgbouncer; then
-    echo "PgBouncer       : Running"
-else
-    echo "PgBouncer       : Not Installed"
+if ! docker ps >/dev/null 2>&1; then
+    echo "Docker          : Not Installed"
+    echo
+    pause
+    exit 0
 fi
 
 ########################################
