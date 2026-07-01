@@ -11,7 +11,7 @@ clear
 title "PasarGuard Status"
 
 ########################################
-# System Information
+# System
 ########################################
 
 HOSTNAME=$(hostname)
@@ -22,8 +22,10 @@ UPTIME=$(uptime -p)
 CPU=$(grep "model name" /proc/cpuinfo | head -1 | cut -d: -f2 | xargs)
 RAM=$(free -h | awk '/Mem:/ {print $3 " / " $2}')
 DISK=$(df -h / | awk 'NR==2 {print $3 " / " $2 " (" $5 ")"}')
-LOAD=$(uptime | awk -F'load average:' '{print $2}')
+LOAD=$(uptime | awk -F'load average:' '{print $2}' | xargs)
 
+echo "System"
+echo "----------------------------------------"
 echo "Hostname        : $HOSTNAME"
 echo "IP Address      : $IP"
 echo "Operating System: $OS"
@@ -32,10 +34,9 @@ echo "Uptime          : $UPTIME"
 echo "CPU             : $CPU"
 echo "Memory          : $RAM"
 echo "Disk            : $DISK"
-echo "CPU Load        :$LOAD"
+echo "CPU Load        : $LOAD"
 
 echo
-echo "----------------------------------------"
 echo "Services"
 echo "----------------------------------------"
 
@@ -44,19 +45,21 @@ echo "----------------------------------------"
 ########################################
 
 if systemctl is-active --quiet docker; then
-    echo "Docker          : Running"
+    DOCKER_STATUS="✓ Running"
 else
-    echo "Docker          : Stopped"
+    DOCKER_STATUS="✗ Stopped"
 fi
+
+echo "Docker          : $DOCKER_STATUS"
 
 ########################################
 # Panel
 ########################################
 
 if docker exec pasarguard-pasarguard-1 curl -fs http://localhost:8000/ >/dev/null 2>&1; then
-    PANEL_STATUS="Running"
+    PANEL_STATUS="✓ Healthy"
 else
-    PANEL_STATUS="Unhealthy"
+    PANEL_STATUS="✗ Unhealthy"
 fi
 
 echo "Panel           : $PANEL_STATUS"
@@ -65,68 +68,85 @@ echo "Panel           : $PANEL_STATUS"
 # Database
 ########################################
 
-DB="Unknown"
-
-if docker ps --format '{{.Names}}' | grep -q "timescaledb"; then
-    DB="TimescaleDB"
-elif docker ps --format '{{.Names}}' | grep -qi postgres; then
-    DB="PostgreSQL"
-elif docker ps --format '{{.Names}}' | grep -qi mariadb; then
-    DB="MariaDB"
-elif docker ps --format '{{.Names}}' | grep -qi mysql; then
-    DB="MySQL"
-elif docker ps --format '{{.Names}}' | grep -qi sqlite; then
-    DB="SQLite"
+if docker ps --format "{{.Names}}" | grep -q "timescaledb"; then
+    DB_STATUS="✓ TimescaleDB"
+else
+    DB_STATUS="✗ Offline"
 fi
 
-echo "Database        : $DB"
+echo "Database        : $DB_STATUS"
 
 ########################################
 # PgBouncer
 ########################################
 
-if ! docker ps >/dev/null 2>&1; then
-    echo "Docker          : Not Installed"
-    echo
-    pause
-    exit 0
+if docker ps --format "{{.Names}}" | grep -q "pgbouncer"; then
+    PGB_STATUS="✓ Running"
+else
+    PGB_STATUS="✗ Offline"
 fi
 
+echo "PgBouncer       : $PGB_STATUS"
+
 ########################################
-# Version
+# PasarGuard
 ########################################
+
+echo
+echo "PasarGuard"
+echo "----------------------------------------"
 
 VERSION=$(docker exec pasarguard-pasarguard-1 python -c "import app;print(app.__version__)" 2>/dev/null)
 
-if [ -z "$VERSION" ]; then
-    VERSION="Unknown"
-fi
+[ -z "$VERSION" ] && VERSION="Unknown"
 
-echo "Panel Version   : $VERSION"
-
-########################################
-# Nodes
-########################################
+echo "Version         : $VERSION"
 
 NODE_COUNT=$(docker exec pasarguard-pasarguard-1 python - <<EOF 2>/dev/null
 from app.db import GetDB
 from app.models.node import Node
-db=GetDB()
+
+db = GetDB()
 print(db.query(Node).count())
 EOF
 )
 
-[ -z "$NODE_COUNT" ] && NODE_COUNT="0"
+[ -z "$NODE_COUNT" ] && NODE_COUNT=0
 
-echo "Nodes           : $NODE_COUNT"
+if [ "$NODE_COUNT" -eq 0 ]; then
+    echo "Nodes           : 0 (No nodes configured)"
+else
+    echo "Nodes           : $NODE_COUNT"
+fi
+
+########################################
+# Containers
+########################################
 
 echo
-echo "----------------------------------------"
 echo "Docker Containers"
 echo "----------------------------------------"
 
-docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Image}}"
+printf "%-30s %-15s\n" "NAME" "STATUS"
+
+docker ps --format "{{.Names}}|{{.Status}}" | while IFS="|" read -r NAME STATUS
+do
+    case "$STATUS" in
+        *healthy*)
+            ICON="✓ Healthy"
+            ;;
+        Up*)
+            ICON="✓ Running"
+            ;;
+        *)
+            ICON="✗ Stopped"
+            ;;
+    esac
+
+    printf "%-30s %-15s\n" "$NAME" "$ICON"
+done
 
 echo
+echo "----------------------------------------"
 
 pause
