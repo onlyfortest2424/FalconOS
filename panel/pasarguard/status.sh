@@ -5,8 +5,6 @@ BASE_DIR="$(cd "$(dirname "$0")/../../.." && pwd)"
 source "$BASE_DIR/core/ui.sh"
 source "$BASE_DIR/core/functions.sh"
 
-pasarguard_status() {
-
 clear
 
 title "PasarGuard Status"
@@ -14,13 +12,42 @@ title "PasarGuard Status"
 echo
 
 ########################################
+# System Information
+########################################
+
+HOSTNAME=$(hostname)
+IP=$(hostname -I | awk '{print $1}')
+OS=$(grep PRETTY_NAME /etc/os-release | cut -d= -f2 | tr -d '"')
+KERNEL=$(uname -r)
+UPTIME=$(uptime -p)
+CPU=$(grep "model name" /proc/cpuinfo | head -1 | cut -d: -f2 | xargs)
+RAM=$(free -h | awk '/Mem:/ {print $3 " / " $2}')
+DISK=$(df -h / | awk 'NR==2 {print $3 " / " $2 " (" $5 ")"}')
+LOAD=$(uptime | awk -F'load average:' '{print $2}')
+
+echo "Hostname        : $HOSTNAME"
+echo "IP Address      : $IP"
+echo "Operating System: $OS"
+echo "Kernel          : $KERNEL"
+echo "Uptime          : $UPTIME"
+echo "CPU             : $CPU"
+echo "Memory          : $RAM"
+echo "Disk            : $DISK"
+echo "CPU Load        :$LOAD"
+
+echo
+echo "----------------------------------------"
+echo "Services"
+echo "----------------------------------------"
+
+########################################
 # Docker
 ########################################
 
 if systemctl is-active --quiet docker; then
-    echo "Docker        : Running"
+    echo "Docker          : Running"
 else
-    echo "Docker        : Stopped"
+    echo "Docker          : Stopped"
 fi
 
 ########################################
@@ -28,29 +55,39 @@ fi
 ########################################
 
 if docker ps --format '{{.Names}}' | grep -q "pasarguard-pasarguard"; then
-    echo "Panel         : Running"
+    echo "Panel           : Running"
 else
-    echo "Panel         : Stopped"
+    echo "Panel           : Stopped"
 fi
 
 ########################################
-# TimescaleDB
+# Database
 ########################################
+
+DB="Unknown"
 
 if docker ps --format '{{.Names}}' | grep -q "timescaledb"; then
-    echo "Database      : TimescaleDB"
-else
-    echo "Database      : Not Running"
+    DB="TimescaleDB"
+elif docker ps --format '{{.Names}}' | grep -qi postgres; then
+    DB="PostgreSQL"
+elif docker ps --format '{{.Names}}' | grep -qi mariadb; then
+    DB="MariaDB"
+elif docker ps --format '{{.Names}}' | grep -qi mysql; then
+    DB="MySQL"
+elif docker ps --format '{{.Names}}' | grep -qi sqlite; then
+    DB="SQLite"
 fi
+
+echo "Database        : $DB"
 
 ########################################
 # PgBouncer
 ########################################
 
-if docker ps --format '{{.Names}}' | grep -q "pgbouncer"; then
-    echo "PgBouncer     : Running"
+if docker ps --format '{{.Names}}' | grep -q pgbouncer; then
+    echo "PgBouncer       : Running"
 else
-    echo "PgBouncer     : Not Running"
+    echo "PgBouncer       : Not Installed"
 fi
 
 ########################################
@@ -59,20 +96,35 @@ fi
 
 VERSION=$(docker exec pasarguard-pasarguard-1 python -c "import app;print(app.__version__)" 2>/dev/null)
 
-if [ -n "$VERSION" ]; then
-    echo "Version       : $VERSION"
+if [ -z "$VERSION" ]; then
+    VERSION="Unknown"
 fi
 
-echo
-echo "Containers"
-echo "---------------------------"
+echo "Panel Version   : $VERSION"
 
-docker ps --format "table {{.Names}}\t{{.Status}}"
+########################################
+# Nodes
+########################################
+
+NODE_COUNT=$(docker exec pasarguard-pasarguard-1 python - <<EOF 2>/dev/null
+from app.db import GetDB
+from app.models.node import Node
+db=GetDB()
+print(db.query(Node).count())
+EOF
+)
+
+[ -z "$NODE_COUNT" ] && NODE_COUNT="0"
+
+echo "Nodes           : $NODE_COUNT"
+
+echo
+echo "----------------------------------------"
+echo "Docker Containers"
+echo "----------------------------------------"
+
+docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Image}}"
 
 echo
 
 pause
-
-}
-
-pasarguard_status
