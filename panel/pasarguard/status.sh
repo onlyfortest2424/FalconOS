@@ -3,16 +3,12 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BASE_DIR="$(realpath "$SCRIPT_DIR/../..")"
 
-echo "SCRIPT_DIR=$SCRIPT_DIR"
-echo "BASE_DIR=$BASE_DIR"
-echo "UI Exists? $(test -f "$BASE_DIR/core/ui.sh" && echo YES || echo NO)"
-
 source "$BASE_DIR/core/ui.sh"
+source "$BASE_DIR/core/functions.sh"
 
-echo "Source Exit Code=$?"
+clear
 
-type title
-type pause
+title "PasarGuard Status"
 
 ########################################
 # System Information
