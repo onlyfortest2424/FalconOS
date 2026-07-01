@@ -53,11 +53,13 @@ fi
 # Panel
 ########################################
 
-if docker ps --format '{{.Names}}' | grep -q "pasarguard-pasarguard"; then
-    echo "Panel           : Running"
+if docker exec pasarguard-pasarguard-1 curl -fs http://localhost:8000/ >/dev/null 2>&1; then
+    PANEL_STATUS="Running"
 else
-    echo "Panel           : Stopped"
+    PANEL_STATUS="Unhealthy"
 fi
+
+echo "Panel           : $PANEL_STATUS"
 
 ########################################
 # Database
