@@ -30,3 +30,10 @@ install_package(){
         apt install -y "$PKG"
     fi
 }
+
+pause() {
+
+    echo
+    echo "----------------------------------------"
+    read -rp "Press Enter to return..."
+}

@@ -36,9 +36,11 @@ title(){
     echo
 }
 
-pause(){
+pause() {
+
     echo
-    read -rp "Press Enter to continue..."
+    echo "----------------------------------------"
+    read -rp "Press Enter to return..."
 }
 
 progress_bar(){
