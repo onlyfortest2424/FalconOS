@@ -112,6 +112,7 @@ case "$MENU" in
     bash "$BASE_DIR/panel/pasarguard/subscription/install.sh"
 
 ;;
+
 4)
 
     bash "$BASE_DIR/panel/pasarguard/owner.sh"
@@ -120,31 +121,37 @@ case "$MENU" in
 
 5)
 
-    bash "$BASE_DIR/panel/pasarguard/status.sh"
+    bash "$BASE_DIR/panel/pasarguard/ssl/menu.sh"
 
 ;;
 
 6)
 
-    bash "$BASE_DIR/panel/pasarguard/backup.sh"
+    bash "$BASE_DIR/panel/pasarguard/status.sh"
 
 ;;
 
 7)
 
-    bash "$BASE_DIR/panel/pasarguard/restore.sh"
+    bash "$BASE_DIR/panel/pasarguard/backup.sh"
 
 ;;
 
 8)
 
-    bash "$BASE_DIR/panel/pasarguard/update.sh"
+    bash "$BASE_DIR/panel/pasarguard/restore.sh"
 
 ;;
 
 9)
 
-    bash "$BASE_DIR/panel/pasarguard/panel/install.sh"
+    bash "$BASE_DIR/panel/pasarguard/update.sh"
+
+;;
+
+10)
+
+    bash "$BASE_DIR/panel/pasarguard/uninstall.sh"
 
 ;;
 
@@ -161,6 +168,7 @@ case "$MENU" in
 ;;
 
 esac
+
 
 done
 
