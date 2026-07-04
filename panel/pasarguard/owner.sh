@@ -22,11 +22,12 @@ fi
 
 echo "✓ PasarGuard is running."
 echo
+
 echo "Generating temporary setup key..."
 echo
 
 docker exec -it pasarguard-pasarguard-1 \
-    pasarguard cli generate-temp-key
+    pasarguard-cli generate-temp-key
 
 if [ $? -ne 0 ]; then
     echo
