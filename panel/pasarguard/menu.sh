@@ -75,15 +75,15 @@ echo " [1] Install Panel"
 echo " [2] Install Node"
 echo " [3] Install Subscription Template"
 echo " [4] Create Owner Account"
-
+echo " [5] SSL Certificate"
 echo
 echo "----------------------------------------------"
 echo
-echo " [5] Status"
-echo " [6] Backup"
-echo " [7] Restore"
-echo " [8] Update"
-echo " [9] Uninstall"
+echo " [6] Status"
+echo " [7] Backup"
+echo " [8] Restore"
+echo " [9] Update"
+echo "[10] Uninstall"
 
 echo
 echo "----------------------------------------------"
@@ -118,7 +118,7 @@ case "$MENU" in
 
 ;;
 
-45)
+5)
 
     bash "$BASE_DIR/panel/pasarguard/status.sh"
 
