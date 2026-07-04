@@ -74,14 +74,17 @@ echo
 echo " [1] Install Panel"
 echo " [2] Install Node"
 echo " [3] Install Subscription Template"
+echo " [4] Create Owner Account"
+
 echo
 echo "----------------------------------------------"
 echo
-echo " [4] Status"
-echo " [5] Backup"
-echo " [6] Restore"
-echo " [7] Update"
-echo " [8] Uninstall"
+echo " [5] Status"
+echo " [6] Backup"
+echo " [7] Restore"
+echo " [8] Update"
+echo " [9] Uninstall"
+
 echo
 echo "----------------------------------------------"
 echo
@@ -109,32 +112,37 @@ case "$MENU" in
     bash "$BASE_DIR/panel/pasarguard/subscription/install.sh"
 
 ;;
-
 4)
+
+    bash "$BASE_DIR/panel/pasarguard/owner.sh"
+
+;;
+
+45)
 
     bash "$BASE_DIR/panel/pasarguard/status.sh"
 
 ;;
 
-5)
+6)
 
     bash "$BASE_DIR/panel/pasarguard/backup.sh"
 
 ;;
 
-6)
+7)
 
     bash "$BASE_DIR/panel/pasarguard/restore.sh"
 
 ;;
 
-7)
+8)
 
     bash "$BASE_DIR/panel/pasarguard/update.sh"
 
 ;;
 
-8)
+9)
 
     bash "$BASE_DIR/panel/pasarguard/panel/install.sh"
 
