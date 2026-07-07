@@ -6,8 +6,8 @@ while true; do
 
     title "Backhaul Installation"
 
-    echo "[1] Install Server (Outside / خارج)"
-    echo "[2] Install Client (Iran / ایران)"
+    echo "[1] Install Server (Kharej / جراخ)"
+    echo "[2] Install Client (Iran / ناریا)"
     echo
     echo "[0] Back"
     echo
