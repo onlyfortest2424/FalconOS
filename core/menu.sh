@@ -1,45 +1,72 @@
 #!/usr/bin/env bash
 
-main_menu(){
+#########################################
+# FalconOS Menu Engine v1.0
+#########################################
+
+main_menu() {
 
 while true; do
 
-clear
-show_banner
+    draw_header "Main Menu"
 
-echo "[1] Panel"
-echo "[2] Tunnel (Coming Soon)"
-echo "[3] Tools (Coming Soon)"
-echo "[4] Security (Coming Soon)"
-echo "[5] System (Coming Soon)"
-echo
-echo "[0] Exit"
-echo
+    echo "[1] Panel"
+    echo "[2] Tunnel (Coming Soon)"
+    echo "[3] Tools (Coming Soon)"
+    echo "[4] Security (Coming Soon)"
+    echo "[5] System (Coming Soon)"
+    echo
+    echo "[0] Exit"
 
-read -rp "Choose: " opt
+    draw_footer
 
-case $opt in
+    read -rp "Choose: " opt
 
-1)
-    source "$BASE_DIR/panel/pasarguard/menu.sh"
-    panel_menu
-;;
+    case "$opt" in
 
-2|3|4|5)
-    warn "Coming Soon"
-    pause
-;;
+        1)
+            source "$BASE_DIR/panel/pasarguard/menu.sh"
+            panel_menu
+        ;;
 
-0)
-    exit 0
-;;
+        2)
+           source "$BASE_DIR/tunnel/menu.sh"
+           tunnel_menu
+        ;;
 
-*)
-    warn "Invalid Option"
-    sleep 1
-;;
+        3)
+            # source "$BASE_DIR/tools/menu.sh"
+            # tools_menu
+            warn "Coming Soon"
+            pause
+        ;;
 
-esac
+        4)
+            # source "$BASE_DIR/security/menu.sh"
+            # security_menu
+            warn "Coming Soon"
+            pause
+        ;;
+
+        5)
+            # source "$BASE_DIR/system/menu.sh"
+            # system_menu
+            warn "Coming Soon"
+            pause
+        ;;
+
+        0)
+            clear
+            exit 0
+        ;;
+
+        *)
+            warn "Invalid Option"
+            sleep 1
+        ;;
+
+    esac
 
 done
+
 }

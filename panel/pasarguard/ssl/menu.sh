@@ -26,7 +26,7 @@ do
     case "$OPTION" in
         1) bash "$SCRIPT_DIR/issue-panel.sh" ;;
         2) bash "$SCRIPT_DIR/issue-node.sh" ;;
-        3) bash "$SCRIPT_DIR/import.sh" ;;
+        3) bash "$SCRIPT_DIR/import-certificate.sh" ;;
         0) exit ;;
         *) invalid ;;
     esac
