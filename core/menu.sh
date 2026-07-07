@@ -11,7 +11,7 @@ while true; do
     draw_header "Main Menu"
 
     echo "[1] Panel"
-    echo "[2] Tunnel (Coming Soon)"
+    echo "[2] Tunnel"
     echo "[3] Tools (Coming Soon)"
     echo "[4] Security (Coming Soon)"
     echo "[5] System (Coming Soon)"

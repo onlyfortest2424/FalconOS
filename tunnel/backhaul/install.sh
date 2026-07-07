@@ -91,11 +91,12 @@ install_backhaul_server() {
     # Get Latest Backhaul Release
     get_latest_backhaul_version
 
-    echo
-    echo "System is ready for Backhaul installation."
-    echo
+    download_backhaul
 
-    pause
+echo
+ok "Backhaul package downloaded successfully."
+
+pause
 
 }
 
@@ -132,5 +133,28 @@ get_latest_backhaul_version() {
     fi
 
     ok "Latest Version : $BACKHAUL_VERSION"
+
+}
+
+#########################################
+# Download Backhaul
+#########################################
+
+download_backhaul() {
+
+    echo
+    echo "Downloading Backhaul..."
+    echo
+
+    DOWNLOAD_URL="https://github.com/Musixal/Backhaul/releases/download/${BACKHAUL_VERSION}/backhaul_linux_${ARCH}.tar.gz"
+
+    TMP_FILE="/tmp/backhaul_${BACKHAUL_VERSION}_${ARCH}.tar.gz"
+
+    if ! curl -L --progress-bar -o "$TMP_FILE" "$DOWNLOAD_URL"; then
+        error "Failed to download Backhaul package."
+        return 1
+    fi
+
+    ok "Package Downloaded"
 
 }
