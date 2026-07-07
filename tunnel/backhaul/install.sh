@@ -78,15 +78,18 @@ install_backhaul_server() {
 
     ok "Architecture : $ARCH"
 
-    # Detect OS
+    # Detect Operating System
     if [[ -f /etc/os-release ]]; then
         . /etc/os-release
-        OS="$NAME"
+        OS="$PRETTY_NAME"
     else
         OS="Unknown"
     fi
 
     ok "Operating System : $OS"
+
+    # Get Latest Backhaul Release
+    get_latest_backhaul_version
 
     echo
     echo "System is ready for Backhaul installation."
@@ -107,5 +110,27 @@ install_backhaul_client() {
     warn "Coming Soon"
 
     pause
+
+}
+
+#########################################
+# Get Latest Backhaul Release
+#########################################
+
+get_latest_backhaul_version() {
+
+    echo "Checking latest Backhaul release..."
+    echo
+
+    BACKHAUL_VERSION=$(curl -fsSL https://api.github.com/repos/Musixal/Backhaul/releases/latest \
+        | grep '"tag_name"' \
+        | cut -d '"' -f4)
+
+    if [[ -z "$BACKHAUL_VERSION" ]]; then
+        error "Failed to get latest Backhaul version."
+        return 1
+    fi
+
+    ok "Latest Version : $BACKHAUL_VERSION"
 
 }
