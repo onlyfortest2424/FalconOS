@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 source "$BASE_DIR/tunnel/backhaul/dashboard.sh"
+source "$BASE_DIR/tunnel/backhaul/install.sh"
 
 backhaul_menu() {
 
@@ -26,9 +27,13 @@ while true; do
 
     case "$opt" in
 
-        1|2|3|4|5|6|7)
-            warn "Coming Soon"
-            pause
+        1)
+    install_backhaul
+    ;;
+
+         2|3|4|5|6|7)
+        warn "Coming Soon"
+        pause
         ;;
 
         0)
