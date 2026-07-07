@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+source "$BASE_DIR/tunnel/backhaul/dashboard.sh"
+
 backhaul_menu() {
 
 while true; do
