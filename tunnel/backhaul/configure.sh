@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+#########################################
+# Backhaul Configuration
+#########################################
+
 configure_backhaul() {
 
 while true; do
@@ -17,7 +21,7 @@ while true; do
     case "$opt" in
 
         1)
-            configure_backhaul_server
+            server_wizard
         ;;
 
         2)
@@ -40,8 +44,27 @@ done
 }
 
 #########################################
+# Server Wizard
+#########################################
 
-configure_backhaul_server() {
+server_wizard() {
+
+    ask_transport
+    ask_server_port
+    ask_server_token
+    ask_server_mapping
+
+    review_server_configuration
+
+}
+
+#########################################
+# Transport
+#########################################
+
+ask_transport() {
+
+while true; do
 
     title "Backhaul Server Configuration"
 
@@ -61,36 +84,41 @@ configure_backhaul_server() {
 
         1)
             TRANSPORT="tcp"
+            return
         ;;
 
         2)
             TRANSPORT="ws"
+            return
         ;;
 
         3)
-            TRANSPORT="tcp"
+            TRANSPORT="tcp+tls"
+            return
         ;;
 
         4)
             TRANSPORT="grpc"
+            return
         ;;
 
         0)
-            return
+            return 1
         ;;
 
         *)
             warn "Invalid Option"
-            pause
-            return
+            sleep 1
         ;;
 
     esac
 
-    ask_server_port
+done
 
 }
 
+#########################################
+# Listen Port
 #########################################
 
 ask_server_port() {
@@ -99,14 +127,19 @@ ask_server_port() {
 
     echo "Transport : $TRANSPORT"
     echo
+    echo "Backhaul Server Listen Port"
+    echo
+    echo "Range : 1 - 65535"
+    echo
 
     ask_required "Listen Port"
-    SERVER_PORT="$REPLY"
 
-    ask_server_token
+    SERVER_PORT="$REPLY"
 
 }
 
+#########################################
+# Token
 #########################################
 
 ask_server_token() {
@@ -116,14 +149,19 @@ ask_server_token() {
     echo "Transport : $TRANSPORT"
     echo "Port      : $SERVER_PORT"
     echo
+    echo "Authentication Token"
+    echo
+    echo "English letters and numbers only."
+    echo
 
     ask_required "Token"
-    TOKEN="$REPLY"
 
-    ask_server_mapping
+    TOKEN="$REPLY"
 
 }
 
+#########################################
+# Port Mapping
 #########################################
 
 ask_server_mapping() {
@@ -142,24 +180,13 @@ ask_server_mapping() {
     echo
 
     ask_required "Port Mapping"
-    PORTS="$REPLY"
 
-    review_server_configuration
+    PORTS="$REPLY"
 
 }
 
 #########################################
-
-configure_backhaul_client() {
-
-    title "Backhaul Client Configuration"
-
-    warn "Coming Soon"
-
-    pause
-
-}
-
+# Review
 #########################################
 
 review_server_configuration() {
@@ -213,6 +240,8 @@ done
 }
 
 #########################################
+# Edit
+#########################################
 
 edit_server_configuration() {
 
@@ -233,22 +262,22 @@ while true; do
     case "$edit" in
 
         1)
-            configure_backhaul_server
+            edit_transport
             return
         ;;
 
         2)
-            ask_server_port
+            edit_port
             return
         ;;
 
         3)
-            ask_server_token
+            edit_token
             return
         ;;
 
         4)
-            ask_server_mapping
+            edit_mapping
             return
         ;;
 
@@ -264,5 +293,67 @@ while true; do
     esac
 
 done
+
+}
+
+#########################################
+# Edit Transport
+#########################################
+
+edit_transport() {
+
+    ask_transport
+
+    review_server_configuration
+
+}
+
+#########################################
+# Edit Port
+#########################################
+
+edit_port() {
+
+    ask_server_port
+
+    review_server_configuration
+
+}
+
+#########################################
+# Edit Token
+#########################################
+
+edit_token() {
+
+    ask_server_token
+
+    review_server_configuration
+
+}
+
+#########################################
+# Edit Mapping
+#########################################
+
+edit_mapping() {
+
+    ask_server_mapping
+
+    review_server_configuration
+
+}
+
+#########################################
+# Client
+#########################################
+
+configure_backhaul_client() {
+
+    title "Backhaul Client Configuration"
+
+    warn "Coming Soon"
+
+    pause
 
 }
