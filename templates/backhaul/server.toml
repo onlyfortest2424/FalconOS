@@ -1,0 +1,16 @@
+[server]
+
+transport = "{{TRANSPORT}}"
+bind_addr = "0.0.0.0:{{BIND_PORT}}"
+token = "{{TOKEN}}"
+
+keepalive_period = 75
+heartbeat = 40
+channel_size = 2048
+sniffer = false
+web_port = 0
+log_level = "info"
+
+ports = [
+    "{{PORTS}}"
+]

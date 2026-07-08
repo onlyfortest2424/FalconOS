@@ -1,0 +1,16 @@
+[client]
+
+transport = "{{TRANSPORT}}"
+remote_addr = "{{SERVER_IP}}:{{SERVER_PORT}}"
+token = "{{TOKEN}}"
+
+keepalive_period = 75
+heartbeat = 40
+channel_size = 2048
+retry_interval = 3
+sniffer = false
+log_level = "info"
+
+ports = [
+    "{{PORTS}}"
+]
