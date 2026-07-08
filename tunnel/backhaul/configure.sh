@@ -100,7 +100,8 @@ ask_server_port() {
     echo "Transport : $TRANSPORT"
     echo
 
-    read -rp "Listen Port : " SERVER_PORT
+    ask_required "Listen Port"
+    SERVER_PORT="$REPLY"
 
     ask_server_token
 
@@ -116,7 +117,8 @@ ask_server_token() {
     echo "Port      : $SERVER_PORT"
     echo
 
-    read -rp "Token : " TOKEN
+    ask_required "Token"
+    TOKEN="$REPLY"
 
     ask_server_mapping
 
@@ -133,7 +135,8 @@ ask_server_mapping() {
     echo "443=127.0.0.1:443"
     echo
 
-    read -rp "Port Mapping : " PORTS
+    ask_required "Port Mapping"
+    PORTS="$REPLY"
 
     echo
     ok "Wizard completed."

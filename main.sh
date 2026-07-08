@@ -14,6 +14,7 @@ source "$BASE_DIR/core/ui.sh"
 source "$BASE_DIR/core/header.sh"
 source "$BASE_DIR/core/footer.sh"
 source "$BASE_DIR/core/functions.sh"
+source "$BASE_DIR/core/wizard.sh"
 source "$BASE_DIR/core/menu.sh"
 main() {
     while true
