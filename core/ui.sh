@@ -11,7 +11,7 @@ YELLOW='\033[1;33m'
 CYAN='\033[0;36m'
 
 STEP=0
-TOTAL=6
+TOTAL=10
 
 clear_screen(){
     clear

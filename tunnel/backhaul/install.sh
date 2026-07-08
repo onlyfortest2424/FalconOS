@@ -93,9 +93,10 @@ install_backhaul_server() {
 
 download_backhaul
 extract_backhaul
+install_binary
 
 echo
-ok "Backhaul package is ready."
+ok "Backhaul binary installed."
 
 pause
 
@@ -181,5 +182,33 @@ extract_backhaul() {
     fi
 
     ok "Package Extracted"
+
+}
+
+#########################################
+# Install Binary
+#########################################
+
+install_binary() {
+
+    echo
+    echo "Installing Backhaul..."
+    echo
+
+    BINARY_FILE=$(find "$EXTRACT_DIR" -type f -name "backhaul" | head -n 1)
+
+    if [[ ! -f "$BINARY_FILE" ]]; then
+        error "Backhaul binary not found."
+        return 1
+    fi
+
+    install -m 755 "$BINARY_FILE" /usr/local/bin/backhaul
+
+    if [[ ! -f /usr/local/bin/backhaul ]]; then
+        error "Binary installation failed."
+        return 1
+    fi
+
+    ok "Binary Installed"
 
 }
