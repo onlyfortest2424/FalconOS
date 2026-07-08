@@ -91,10 +91,11 @@ install_backhaul_server() {
     # Get Latest Backhaul Release
     get_latest_backhaul_version
 
-    download_backhaul
+download_backhaul
+extract_backhaul
 
 echo
-ok "Backhaul package downloaded successfully."
+ok "Backhaul package is ready."
 
 pause
 
@@ -156,5 +157,29 @@ download_backhaul() {
     fi
 
     ok "Package Downloaded"
+
+}
+
+#########################################
+# Extract Backhaul
+#########################################
+
+extract_backhaul() {
+
+    echo
+    echo "Extracting package..."
+    echo
+
+    EXTRACT_DIR="/tmp/backhaul_${BACKHAUL_VERSION}_${ARCH}"
+
+    rm -rf "$EXTRACT_DIR"
+    mkdir -p "$EXTRACT_DIR"
+
+    if ! tar -xzf "$TMP_FILE" -C "$EXTRACT_DIR"; then
+        error "Failed to extract package."
+        return 1
+    fi
+
+    ok "Package Extracted"
 
 }
