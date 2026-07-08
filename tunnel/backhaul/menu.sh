@@ -2,6 +2,7 @@
 
 source "$BASE_DIR/tunnel/backhaul/dashboard.sh"
 source "$BASE_DIR/tunnel/backhaul/install.sh"
+source "$BASE_DIR/tunnel/backhaul/configure.sh"
 
 backhaul_menu() {
 
@@ -28,12 +29,16 @@ while true; do
     case "$opt" in
 
         1)
-    install_backhaul
-    ;;
+            install_backhaul
+        ;;
 
-         2|3|4|5|6|7)
-        warn "Coming Soon"
-        pause
+        2)
+            configure_backhaul
+        ;;
+
+        3|4|5|6|7)
+            warn "Coming Soon"
+            pause
         ;;
 
         0)
