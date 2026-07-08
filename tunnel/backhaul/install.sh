@@ -94,9 +94,10 @@ install_backhaul_server() {
 download_backhaul
 extract_backhaul
 install_binary
+create_directories
 
 echo
-ok "Backhaul binary installed."
+ok "Backhaul installation completed successfully."
 
 pause
 
@@ -210,5 +211,24 @@ install_binary() {
     fi
 
     ok "Binary Installed"
+
+}
+
+#########################################
+# Create Backhaul Directories
+#########################################
+
+create_directories() {
+
+    echo
+    echo "Creating directories..."
+    echo
+
+    mkdir -p /etc/backhaul/server
+    mkdir -p /etc/backhaul/client
+    mkdir -p /etc/backhaul/backup
+    mkdir -p /var/log/backhaul
+
+    ok "Directories Created"
 
 }
