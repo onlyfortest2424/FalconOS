@@ -95,9 +95,10 @@ download_backhaul
 extract_backhaul
 install_binary
 create_directories
+create_server_service
 
 echo
-ok "Backhaul installation completed successfully."
+ok "Backhaul installed successfully."
 
 pause
 
@@ -230,5 +231,36 @@ create_directories() {
     mkdir -p /var/log/backhaul
 
     ok "Directories Created"
+
+}
+
+#########################################
+# Create Server Service
+#########################################
+
+create_server_service() {
+
+    echo
+    echo "Creating systemd service..."
+    echo
+
+cat >/etc/systemd/system/backhaul-server.service <<EOF
+[Unit]
+Description=Backhaul Server
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/backhaul -c /etc/backhaul/server/server.toml
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+    systemctl daemon-reload
+
+    ok "Server Service Created"
 
 }
