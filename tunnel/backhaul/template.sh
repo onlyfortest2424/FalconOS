@@ -6,6 +6,8 @@
 
 generate_server_config() {
 
+    echo "Template Engine Started"
+
     mkdir -p /etc/backhaul/server
 
     cp "$BASE_DIR/templates/backhaul/server.toml" \
