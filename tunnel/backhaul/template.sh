@@ -6,7 +6,6 @@
 
 generate_server_config() {
 
-    echo "Template Engine Started"
 
     mkdir -p /etc/backhaul/server
 

@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-source "$BASE_DIR/tunnel/backhaul/dashboard.sh"
-source "$BASE_DIR/tunnel/backhaul/install.sh"
-source "$BASE_DIR/tunnel/backhaul/configure.sh"
+source "$BASE_DIR/tunnel/backhaul/load.sh"
 
 backhaul_menu() {
 
@@ -21,6 +19,7 @@ while true; do
     echo "[7] Uninstall"
     echo
     echo "[0] Back"
+    echo
 
     draw_footer
 
@@ -36,7 +35,27 @@ while true; do
             configure_backhaul
         ;;
 
-        3|4|5|6|7)
+        3)
+            warn "Coming Soon"
+            pause
+        ;;
+
+        4)
+            warn "Coming Soon"
+            pause
+        ;;
+
+        5)
+            warn "Coming Soon"
+            pause
+        ;;
+
+        6)
+            warn "Coming Soon"
+            pause
+        ;;
+
+        7)
             warn "Coming Soon"
             pause
         ;;
