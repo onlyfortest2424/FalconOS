@@ -215,9 +215,15 @@ while true; do
     case "$opt" in
 
         1)
-            ok "Configuration saved."
-            pause
-            return
+
+        generate_server_config
+
+        ok "Configuration saved."
+
+        pause
+
+        return
+
         ;;
 
         2)
